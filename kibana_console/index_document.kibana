@@ -1,0 +1,10 @@
+POST metacritic/_doc
+{
+        "id": null,
+        "gameName": "RED DEAD REDEMPTION 2",
+        "reviewerName": "Vgames",
+        "dateReviewed": 1546988400000,
+        "score": 100.0,
+        "text": "With most of the bugs ironed out, and with the PC version getting extra features and graphical improvements, this might be the best version of this game.",
+        "criticReview": true
+}

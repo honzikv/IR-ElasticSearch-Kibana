@@ -1,0 +1,24 @@
+POST metacritic/_doc/2
+{
+"id":2,
+"gameName":"RED DEAD REDEMPTION 2",
+"reviewerName":"AusGamers",
+"dateReviewed":1546556400000,
+"score":100.0,
+"text":"It’s been nine years since the MOTU race has had to read, listen to or watch the couch warriors carry on about this “amazing Western gaming experience”, but now, finally, it’s here and you can strap yourself into your desk chair and uncover the world of New Hanover and beyond. Just… take your time. It’s honestly still worth it, even over 1000 hours in single-player on.",
+"criticReview":true
+}
+
+GET metacritic/_doc/2
+
+POST metacritic/_update/2
+{
+"doc":{
+"gameName": "New Game Name"
+}
+}
+
+GET metacritic/_doc/2
+
+DELETE metacritic/_doc/2
+

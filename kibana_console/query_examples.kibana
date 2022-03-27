@@ -1,0 +1,93 @@
+// Should find all RDR2 reviews since it defaults to OR operator
+GET metacritic/_search
+{
+  "query": {
+    "match": {
+      "gameName": "RED DEAD REDEMPTION II"
+    }
+  }
+}
+
+
+// Add something that is not RDR2
+POST metacritic/_doc/16148
+{
+  "id":16148,
+  "gameName":"SOUTH PARK: THE FRACTURED BUT WHOLE",
+  "reviewerName":"mahama",
+  "dateReviewed":1546815600000,
+  "score": 70.0,
+  "text":"it refines some mechanics from stick of truth and desperately tries to recapture the first game's magic, but it falls short on many occasions.\nhard to explain why, but it's just not as laugh out loud hilarious as sot was. the game world is also very much the same.\nok if it's on sale and you are a huge south park fan.",
+  "criticReview":false
+}
+
+GET metacritic/_search
+{
+  "query": {
+    "match": {
+      "text": {
+        "query": "best game",
+        "operator": "and"
+      }
+    }
+  }
+}
+
+
+// Find something that does not contain best game and score is between 70 - 80
+GET metacritic/_search
+{
+  "query": {
+    "bool": {
+      "must_not": [
+        {
+          "match": {
+            "text": {
+              "query": "best game",
+              "operator": "and"
+            }
+          }
+        }
+      ],
+      "must": [
+        {
+          "range": {
+            "score": {
+              "gte": 70,
+              "lte": 80
+            }
+          }
+        }
+      ]
+    }
+  }
+}
+
+
+GET metacritic/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "text": {
+              "query": "best game",
+              "operator": "and"
+            }
+          }
+        }
+      ],
+      "filter": [
+        {
+          "range": {
+              "score": {
+                "gte": 90,
+                "lte": 100
+              }
+          }
+        }
+      ]
+    }
+  }
+}
