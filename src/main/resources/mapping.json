@@ -1,0 +1,30 @@
+{
+  "mappings": {
+    "properties": {
+      "criticReview": {
+        "type": "boolean"
+      },
+      "dateReviewed": {
+        "type": "date"
+      },
+      "gameName": {
+        "type": "text"
+      },
+      "id": {
+        "type": "long"
+      },
+      "reviewerName": {
+        "type": "text"
+      },
+      "score": {
+        "type": "float"
+      },
+      "text": {
+        "type": "text"
+      },
+      "type": {
+        "type": "text"
+      }
+    }
+  }
+}

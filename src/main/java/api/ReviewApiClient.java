@@ -2,6 +2,9 @@ package api;
 
 
 import co.elastic.clients.elasticsearch._types.ElasticsearchException;
+import co.elastic.clients.elasticsearch._types.mapping.*;
+import co.elastic.clients.elasticsearch.indices.CreateIndexRequest;
+import co.elastic.clients.elasticsearch.indices.PutMappingRequest;
 import data.ReviewDocument;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
@@ -18,14 +21,19 @@ import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
 import lombok.Getter;
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
@@ -53,8 +61,28 @@ public class ReviewApiClient implements IApiClient<ReviewDocument> {
         LOGGER.info("Elasticsearch client created");
     }
 
-    public void createMetacriticIndex() throws ElasticsearchException, IOException {
-        client.indices().create(it -> it.index("metacritic"));
+    public void createMetacriticIndex() throws ElasticsearchException, IOException, URISyntaxException {
+
+        var mapping = new HashMap<String, Property>();
+
+        mapping.put("criticReview", new Property.Builder().boolean_(new BooleanProperty.Builder().build()).build());
+        mapping.put("dateReviewed", new Property.Builder().date(new DateProperty.Builder().build()).build());
+        mapping.put("gameName", new Property.Builder().text(new TextProperty.Builder().build()).build());
+        mapping.put("reviewerName", new Property.Builder().text(new TextProperty.Builder().build()).build());
+        mapping.put("id", new Property.Builder().long_(new LongNumberProperty.Builder().build()).build());
+        mapping.put("type", new Property.Builder().text(new TextProperty.Builder().build()).build());
+        mapping.put("score", new Property.Builder().float_(new FloatNumberProperty.Builder().build()).build());
+        mapping.put("text", new Property.Builder().text(new TextProperty.Builder().build()).build());
+
+        var req = new CreateIndexRequest.Builder()
+                .index("metacritic")
+                .mappings(
+                        new TypeMapping.Builder()
+                                .properties(mapping)
+                                .build())
+                .build();
+
+        client.indices().create(req);
     }
 
     /**
